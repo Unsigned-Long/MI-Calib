@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+    <!-- this program perform static intrinsic calibration for a single IMU -->
+    <!--
+         the following parameters would be considered in the calibration:
+         (1) the scale and non-orthogonal factor (matrix) of accelerator;
+         (2) biases of accelerator and gyroscope;
+         attention: for static intrinsic calibration, the scale and non-orthogonal factor (matrix) of gyroscope
+         are lacking observability (for low-cost MEMS IMUs, which almost can not aware the earth rotation)
+    -->
+    <!-- multiple data pieces are required, they are collected stationary using different placement patterns -->
+    <!-- for example, collect data using the same pattern  as the six-position calibration -->
+    <!-- more details, please see the configure file at $(find mi_calib)/config/tool/config-imu-intri-calib.yaml -->
+    <node pkg="mi_calib" type="mi_calib_imu_intri_calib" name="mi_calib_imu_intri_calib" output="screen">
+        <param name="config_path" value="$(find mi_calib)/output/imu_intri/config-imu-intri-calib.yaml"
+               type="string"/>
+    </node>
+</launch>

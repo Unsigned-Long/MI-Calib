@@ -1,0 +1,100 @@
+CalibParam:
+  EXTRI:
+    SO3_BiToBr:
+      - key: /imu1/frame
+        value:
+          qx: 0
+          qy: 0
+          qz: 0
+          qw: 1
+      - key: /imu2/frame
+        value:
+          qx: 0
+          qy: 0
+          qz: 0
+          qw: 1
+    POS_BiInBr:
+      - key: /imu1/frame
+        value:
+          r0c0: 0
+          r1c0: 0
+          r2c0: 0
+      - key: /imu2/frame
+        value:
+          r0c0: 0
+          r1c0: 0
+          r2c0: 0
+  TEMPORAL:
+    TIME_OFFSET_BiToBr:
+      - key: /imu1/frame
+        value: 0
+      - key: /imu2/frame
+        value: 0
+  INTRI:
+    IMU:
+      - key: /imu1/frame
+        value:
+          ACCE:
+            BIAS:
+              r0c0: 0
+              r1c0: 0
+              r2c0: 0
+            MAP_COEFF:
+              r0c0: 1
+              r1c0: 1
+              r2c0: 1
+              r3c0: 0
+              r4c0: 0
+              r5c0: 0
+          GYRO:
+            BIAS:
+              r0c0: 0
+              r1c0: 0
+              r2c0: 0
+            MAP_COEFF:
+              r0c0: 1
+              r1c0: 1
+              r2c0: 1
+              r3c0: 0
+              r4c0: 0
+              r5c0: 0
+          SO3_AtoG:
+            qx: 0
+            qy: 0
+            qz: 0
+            qw: 1
+      - key: /imu2/frame
+        value:
+          ACCE:
+            BIAS:
+              r0c0: 0
+              r1c0: 0
+              r2c0: 0
+            MAP_COEFF:
+              r0c0: 1
+              r1c0: 1
+              r2c0: 1
+              r3c0: 0
+              r4c0: 0
+              r5c0: 0
+          GYRO:
+            BIAS:
+              r0c0: 0
+              r1c0: 0
+              r2c0: 0
+            MAP_COEFF:
+              r0c0: 1
+              r1c0: 1
+              r2c0: 1
+              r3c0: 0
+              r4c0: 0
+              r5c0: 0
+          SO3_AtoG:
+            qx: 0
+            qy: 0
+            qz: 0
+            qw: 1
+  GRAVITY:
+    r0c0: 0
+    r1c0: 0
+    r2c0: -9.793609999999999

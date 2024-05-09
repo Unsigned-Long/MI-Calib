@@ -1,0 +1,51 @@
+#   The following parameters would be considered in calibration:
+#   (1) the scale and non-orthogonal factor (matrix) of accelerator;
+#   (2) biases of accelerator and gyroscope;
+#   Attention: for static intrinsic calibration, the scale and non-orthogonal factor (matrix) of gyroscope
+#   are lacking observability (for low-cost MEMS IMUs, which almost can not aware the earth rotation)
+
+#   Multiple data pieces are required, they are collected stationary using different placement patterns.
+#   For example, collect data using the same pattern  as the six-position calibration
+Configor:
+  # key: IMU topic, value: IMU type. Supported IMU types are:
+  #   1. SENSOR_IMU: https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Imu.html
+  #   2. SBG_IMU: https://github.com/SBG-Systems/sbg_ros_driver.git
+  #   3. ...
+  IMUTopic: /imu/frame
+  IMUType: SENSOR_IMU
+  GravityNorm: 9.79361
+  OutputPath: /home/csl/ros_ws/MI-Calib/src/mi_calib/output/imu_intri
+  ROSBags:
+    - BagPath: /home/csl/ros_ws/MI-Calib/src/mi_calib/output/imu_intri/imu/X_DOWN_STATIC.bag
+      StaticPieces:
+        # time piece when the body is stationary: [first (start time), second (end time)]
+        # PlotJuggler is suggested  for static time piece checking: https://github.com/facontidavide/PlotJuggler.git
+        # this package can be installed using 'sudo apt-get install ros-noetic-plotjuggler'
+        # run this tool by 'rosrun plotjuggler plotjuggler'
+        # negative number means using all data piece (ensure all data piece is stationary)
+        - first: -1
+          second: -1
+        # the second static piece in this rosbag, which means you can collect all data in a rosbag
+        # - first: 0
+        #   second: 10
+    # the second rosbag, if data is collected. which means you can collect multi-piece data separately
+    - BagPath: /home/csl/ros_ws/MI-Calib/src/mi_calib/output/imu_intri/imu/X_UP_STATIC.bag
+      StaticPieces:
+        - first: -1
+          second: -1
+    - BagPath: /home/csl/ros_ws/MI-Calib/src/mi_calib/output/imu_intri/imu/Y_DOWN_STATIC.bag
+      StaticPieces:
+        - first: -1
+          second: -1
+    - BagPath: /home/csl/ros_ws/MI-Calib/src/mi_calib/output/imu_intri/imu/Y_UP_STATIC.bag
+      StaticPieces:
+        - first: -1
+          second: -1
+    - BagPath: /home/csl/ros_ws/MI-Calib/src/mi_calib/output/imu_intri/imu/Z_DOWN_STATIC.bag
+      StaticPieces:
+        - first: -1
+          second: -1
+    - BagPath: /home/csl/ros_ws/MI-Calib/src/mi_calib/output/imu_intri/imu/Z_UP_STATIC.bag
+      StaticPieces:
+        - first: -1
+          second: -1

@@ -1,0 +1,61 @@
+Configor:
+  DataStream:
+    # key: IMU topic, value: IMU type. Supported IMU types are:
+    #   1. SENSOR_IMU: https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Imu.html
+    #   2. SBG_IMU: https://github.com/SBG-Systems/sbg_ros_driver.git
+    #   3. ...
+    IMUTopics:
+      - key: /imu1/frame
+        value:
+          Type: SENSOR_IMU
+          Intrinsics: /home/csl/ros_ws/MI-Calib/src/mi_calib/output/real-world/data_2023926155612/imu1-intri.yaml
+      - key: /imu2/frame
+        value:
+          Type: SBG_IMU
+          Intrinsics: /home/csl/ros_ws/MI-Calib/src/mi_calib/output/real-world/data_2023926155612/imu2-intri.yaml
+    ReferIMU: /imu1/frame
+    BagPath: "/home/csl/dataset/data_926/data_2023926155612/imus.bag"
+    # valid start time of this bag: 60
+    # valid   end time of this bag: 170
+    BeginTime: 60
+    # 'EndTime' - 'BeginTime'
+    Duration: 20
+    OutputPath: "/home/csl/ros_ws/MI-Calib/src/mi_calib/output/real-world/data_2023926155612"
+  Prior:
+    GravityNorm: 9.79361
+    # the range where the time offsets would be optimized.
+    # make sure this range contains the ground truth of time offsets
+    # If you're not sure, make this field large, but this could lead to longer optimization time
+    TimeOffsetPadding: 0.1
+    # the time distance of two neighbor control points, which determines the accuracy
+    # of the representation of the B-splines. Smaller distance would lead to longer optimization time
+    # common choices: from '0.01' to '0.10'
+    KnotTimeDist:
+      SO3Spline: 0.03
+      LinAcceSpline: 0.02
+    Weight:
+      AcceWeight: 1.0
+      GyroWeight: 1.0
+  Preference:
+    # whether using cuda to speed up when solving least-squares problems
+    UseCudaInSolving: false
+    # whether output the spatiotemporal parameters each iteration
+    OutputParamInEachIter: true
+    # whether output B-splines
+    OutputBSplines: true
+    # whether output kinematics
+    OutputKinematics: true
+    # supported data output format:
+    # (0): JSON
+    # (1): XML
+    # (2): YAML
+    # (3): BINARY (not recommended)
+    OutputDataFormat: 2
+    # if sensor are hardware-synchronized, you could choose to fix temporal parameters by setting this field to 'false'
+    OptTemporalParams: true
+    # number of thread to use for solving, negative value means use all valid thread to perform solving
+    ThreadsToUse: -1
+    # scale of splines for visualization
+    ScaleSpline: 1
+    # scale of coordinates
+    ScaleCoord: 0.2

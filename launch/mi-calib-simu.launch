@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+    <node pkg="mi_calib" type="mi_calib_simu" name="mi_calib_simu_node" output="screen">
+        <param name="output_path" value="/home/csl/ros_ws/MI-Calib/src/mi_calib/output/simu" type="string"/>
+        <!-- the IMU number to simulate, multiple IMUs would be distributed on the surface of a sphere -->
+        <param name="imu_num" value="100" type="int"/>
+        <!-- the measurement frequency of the imu -->
+        <param name="frequency" value="400" type="int"/>
+        <!-- the noise density of accelerator, gyroscope (sigma)  -->
+        <param name="noise" value="0.001;0.0001" type="string"/>
+        <!-- the constant bias of accelerator and gyroscope -->
+        <param name="bias" value="0.000;0.000" type="string"/>
+    </node>
+</launch>

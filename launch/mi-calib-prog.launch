@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+
+    <node pkg="mi_calib" type="mi_calib_prog" name="mi_calib_prog_node" output="screen">
+        <!-- change the value of this field to the path of your self-defined config file -->
+        <param name="config_path" value="$(find mi_calib)/output/simu/config-simu.yaml" type="string"/>
+    </node>
+
+</launch>
