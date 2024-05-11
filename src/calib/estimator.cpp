@@ -130,7 +130,7 @@ namespace ns_mi {
         SplineMetaType so3Meta;
 
         // different relative control points finding [single vs. range]
-        if (OptOption::IsOptionWith(Opt::OPT_TIME_OFFSET_BiToBr, option)) {
+        if (OptOption::IsOptionWith(Opt::OPT_TIME_OFFSET_BiToBr, option) && Configor::DataStream::ReferIMU != topic) {
             double minTime = imuFrame->GetTimestamp() - Configor::Prior::TimeOffsetPadding;
             double maxTime = imuFrame->GetTimestamp() + Configor::Prior::TimeOffsetPadding;
             // invalid time stamp
@@ -280,7 +280,7 @@ namespace ns_mi {
         SplineMetaType so3Meta, acceMeta;
 
         // different relative control points finding [single vs. range]
-        if (OptOption::IsOptionWith(Opt::OPT_TIME_OFFSET_BiToBr, option)) {
+        if (OptOption::IsOptionWith(Opt::OPT_TIME_OFFSET_BiToBr, option) && Configor::DataStream::ReferIMU != topic) {
             double minTime = imuFrame->GetTimestamp() - Configor::Prior::TimeOffsetPadding;
             double maxTime = imuFrame->GetTimestamp() + Configor::Prior::TimeOffsetPadding;
             // invalid time stamp
