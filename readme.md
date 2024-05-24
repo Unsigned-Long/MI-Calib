@@ -148,4 +148,4 @@ The corresponding results would be output to the directory you set in the config
 
 + Sufficiently excited motion is required for accurate spatiotemporal calibration in `MI-Calib`!
 + Considering that the weak observability of the intrinsic parameters (i.e., non-orthogonal factors, rotational misalign-
-  ments, and biases) in the proposed spatiotemporal calibration, they are required pre-calibrated, which can be accomplished in a separate process. (how to calibrate intrinsics of your IMUs, see [***Real-world Experiments***](real-world-expr.md))
+  ments, and biases) in the proposed spatiotemporal calibration, they are required pre-calibrated, which can be accomplished in a separate process. (how to calibrate intrinsics of your IMUs, see [Real-world Experiments](real-world-expr.md))
