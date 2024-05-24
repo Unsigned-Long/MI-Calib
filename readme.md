@@ -2,25 +2,25 @@
 
 ![Static Badge](https://img.shields.io/badge/Calibration-Multiple_Sensors-red) ![Static Badge](https://img.shields.io/badge/Cpp-17-green) ![ ](https://img.shields.io/badge/Multiple-IMUs-blue) ![Static Badge](https://img.shields.io/badge/MI-Calib-red) ![Static Badge](https://img.shields.io/badge/ROS-1.0-green) ![Static Badge](https://img.shields.io/badge/Python-3.0-blue) ![Static Badge](https://img.shields.io/badge/Continuous-Time-red) ![Static Badge](https://img.shields.io/badge/Bspline-Curves-green) ![Static Badge](https://img.shields.io/badge/Spatiotemporal-Calibrator-blue) ![Static Badge](https://img.shields.io/badge/WHU-SGG-red) ![Static Badge](https://img.shields.io/badge/ULong2-Shuolong_Chen-green) ![Static Badge](https://img.shields.io/badge/Wuhan-China-blue)
 
-<div align=center><img src="img/ico.png" width =100%></div>
+<div align=center><img src="img/ico.png" width =70%></div>
 
 ## 0. Preliminaries
 
-If you use ***MI-Calib*** in a scientific publication, please cite the following  paper:smile::
+If you use ***MI-Calib*** in a scientific publication, please cite the following paper 👇:
 
-```latex
-# todo...
-```
++ under review
+
+<p align="left">
+    <a><strong>Todo List »</strong></a>
+</p> 
+
+- [ ] support more inertial ros messages.
 
 ## 1. Overview
 
-The inertial measurement unit (IMU), as an interoceptive sensor typically providing high-frequency angular velocity and specific force measurements, has been widely exploited for accurate motion estimation in modern robotic applications, such as autonomous navigation and exploration. Recently, there has been a trend of integrating multiple IMUs in inertial systems, which outperforms traditional standalone ones regarding the resiliency of sensor failures and measurement depletion and is commercially affordable due to the significantly reduced price for IMUs. For such multi-IMU systems, accurate and consistent spatiotemporal calibration is inevitably required to perform information fusion in a unified framework. Considering most existing methods generally involve additional aiding sensors in calibration, lacking convenience and usability, we propose `MI-Calib`: a high-performance multi-IMU spatiotemporal calibrator based on continuous-time batch optimization, which utilizes only raw inertial measurements from multiple IMUs and requires no  prior. In particular, a rigorous multi-stage initialization procedure is first conducted to recover initial guesses of parameters, followed by a batch optimization, where all states would be refined to global optimal ones. Results from both simulated and real-world experiments demonstrate the high accuracy and consistency of `MI-Calib`. We open-source our implementations to benefit the research community.
+The inertial measurement unit (IMU), as an interoceptive sensor typically providing high-frequency angular velocity and specific force measurements, has been widely exploited for accurate motion estimation in modern robotic applications, such as autonomous navigation and exploration. Recently, there has been a trend of integrating multiple IMUs in inertial systems, which outperforms traditional standalone ones regarding the resiliency of sensor failures and measurement depletion and is commercially affordable due to the significantly reduced price for IMUs. For such multi-IMU systems, accurate and consistent spatiotemporal calibration is inevitably required to perform information fusion in a unified framework. Considering most existing methods generally involve additional aiding sensors in calibration, lacking convenience and usability, we propose `MI-Calib`: a high-performance multi-IMU spatiotemporal calibrator based on continuous-time batch optimization, which utilizes only raw inertial measurements from multiple IMUs and requires no  prior.
 
-<hr style=" height:4px;border:none;border-top:4px solid #8a589f;border-bottom:4px solid #f34b7d;" />
-<div align='center'><font size='5' color='red'><b><i>Demo Video for MI-Calib</i></b></font></div>
-<hr style=" height:4px;border:none;border-top:4px solid #8a589f;border-bottom:4px solid #f34b7d;" />
-
-Our accompanying videos are now available on **[YouTube](https://youtu.be/JFTkFXbInwk)** (click below images to open) and [**Bilibili**](https://www.bilibili.com/video/BV1hK4y1i7uM/).
+Our accompanying videos are now available on [YouTube](https://youtu.be/JFTkFXbInwk) (click below images to open) and [Bilibili](https://www.bilibili.com/video/BV1hK4y1i7uM/).
 
   <div align=center>
    <a href="https://youtu.be/JFTkFXbInwk">
@@ -118,12 +118,12 @@ Our accompanying videos are now available on **[YouTube](https://youtu.be/JFTkFX
 
 ### 3.1 Simulation Test
 
-[***simulation experiments (datasets, launch, result visualization)***](simu-expr.md)
+[datasets, launch, result visualization](simu-expr.md)
 
 
 ### 3.2 Real-world Experiments
 
-[***real-world experiments (datasets, launch, result visualization)***](real-world-expr.md)
+[datasets, launch, result visualization](real-world-expr.md)
 
 ### 3.3 Skip Tutorial
 
