@@ -4,10 +4,10 @@
 // systems and multi-sensor fusion.
 
 #include "calib/calib_solver.h"
-#include "tiny-viewer/core/multi_viewer.h"
 #include "calib/estimator.h"
 #include "cereal/types/list.hpp"
 #include "pangolin/display/display.h"
+#include "tiny-viewer/core/multi_viewer.h"
 
 namespace ns_mi {
 
@@ -18,20 +18,18 @@ namespace ns_mi {
     const std::string CalibSolver::VIEW_SPLINE = "VIEW_SPLINE";
 
     CalibSolver::CalibSolver(CalibDataManager::Ptr calibDataManager, CalibParamManager::Ptr calibParamManager)
-            : _dataMagr(std::move(calibDataManager)), _parMagr(std::move(calibParamManager)),
-              _ceresOption(Estimator::DefaultSolverOptions(
-                      Configor::Preference::ThreadsToUse, true, Configor::Preference::UseCudaInSolving)
-              ), _solveFinished(false) {
+        : _dataMagr(std::move(calibDataManager)), _parMagr(std::move(calibParamManager)),
+          _ceresOption(Estimator::DefaultSolverOptions(
+                  Configor::Preference::ThreadsToUse, true, Configor::Preference::UseCudaInSolving)),
+          _solveFinished(false) {
         auto so3SplineInfo = ns_ctraj::SplineInfo(
                 Configor::Preference::SO3_SPLINE, ns_ctraj::SplineType::So3Spline,
                 _dataMagr->GetCalibStartTimestamp(), _dataMagr->GetCalibEndTimestamp(),
-                Configor::Prior::KnotTimeDist::SO3Spline
-        );
+                Configor::Prior::KnotTimeDist::SO3Spline);
         auto acceSplineInfo = ns_ctraj::SplineInfo(
                 Configor::Preference::ACCE_SPLINE, ns_ctraj::SplineType::RdSpline,
                 _dataMagr->GetCalibStartTimestamp(), _dataMagr->GetCalibEndTimestamp(),
-                Configor::Prior::KnotTimeDist::LinAcceSpline
-        );
+                Configor::Prior::KnotTimeDist::LinAcceSpline);
         _splines = SplineBundleType::Create({so3SplineInfo, acceSplineInfo});
 
         // view create
@@ -94,8 +92,7 @@ namespace ns_mi {
         // add gyroscope residuals
         for (const auto &item: _dataMagr->GetIMUMeasurements(Configor::DataStream::ReferIMU)) {
             estimator->AddIMUGyroMeasurement(
-                    item, Configor::DataStream::ReferIMU, optOption, Configor::Prior::Weight::GyroWeight
-            );
+                    item, Configor::DataStream::ReferIMU, optOption, Configor::Prior::Weight::GyroWeight);
         }
         auto sum = estimator->Solve(_ceresOption);
         spdlog::info("here is the summary:\n{}\n", sum.BriefReport());
@@ -134,6 +131,14 @@ namespace ns_mi {
         // Step 2: initialize (i) gravity, (ii) extrinsic translations
         // -----------------------------------------------------------
         spdlog::info("performing gravity initialization...");
+
+        // assign the gravity roughly, f = a - g, g = a - f
+        Eigen::Vector3d firRefAcce =
+                _dataMagr->GetIMUMeasurements(Configor::DataStream::ReferIMU).front()->GetAcce();
+        _parMagr->GRAVITY = -firRefAcce.normalized() * Configor::Prior::GravityNorm;
+        spdlog::info("rough assigned gravity in world frame: ['{:.3f}', '{:.3f}', '{:.3f}']",
+                     _parMagr->GRAVITY(0), _parMagr->GRAVITY(1), _parMagr->GRAVITY(2));
+
         estimator = Estimator::Create(_splines, _parMagr);
         optOption = OptOption::Option::OPT_POS_BiInBr | OptOption::Option::OPT_GRAVITY;
 
@@ -188,8 +193,7 @@ namespace ns_mi {
                 Eigen::Matrix3d AMat = TrapIntegrationOnce(AMatSeq);
 
                 estimator->AddVelIntegration(
-                        topic, bVec, AMat, sVel, eVel, eTime - sTime, optOption, 1.0
-                );
+                        topic, bVec, AMat, sVel, eVel, eTime - sTime, optOption, 1.0);
             }
         }
         estimator->SetParameterBlockConstant(_parMagr->EXTRI.POS_BiInBr.at(Configor::DataStream::ReferIMU).data());
@@ -206,8 +210,7 @@ namespace ns_mi {
         // add acceleration residuals
         for (const auto &item: _dataMagr->GetIMUMeasurements(Configor::DataStream::ReferIMU)) {
             estimator->AddIMUAcceMeasurement(
-                    item, Configor::DataStream::ReferIMU, optOption, Configor::Prior::Weight::AcceWeight
-            );
+                    item, Configor::DataStream::ReferIMU, optOption, Configor::Prior::Weight::AcceWeight);
         }
 
         sum = estimator->Solve(_ceresOption);
@@ -247,8 +250,7 @@ namespace ns_mi {
         if (!std::filesystem::create_directories(saveDir)) {
             throw ns_mi::Status(
                     ns_mi::Status::Flag::ERROR,
-                    fmt::format("create directory to save trajectories failed: '{}'", saveDir)
-            );
+                    fmt::format("create directory to save trajectories failed: '{}'", saveDir));
         }
         {
             // sampled acceleration points
@@ -271,8 +273,7 @@ namespace ns_mi {
             if (!SavePoseSequence(poseSeq, saveDir + "/b-splines-sample" + ns_mi::Configor::GetFormatExtension(),
                                   ns_mi::Configor::Preference::OutputDataFormat)) {
                 throw ns_mi::Status(
-                        ns_mi::Status::Flag::ERROR, fmt::format("error occurs when saving b-splines to '{}'", saveDir)
-                );
+                        ns_mi::Status::Flag::ERROR, fmt::format("error occurs when saving b-splines to '{}'", saveDir));
             }
         }
         {
@@ -281,8 +282,7 @@ namespace ns_mi {
             auto ar = GetOutputArchiveVariant(file, ns_mi::Configor::Preference::OutputDataFormat);
             SerializeByOutputArchiveVariant(
                     ar, ns_mi::Configor::Preference::OutputDataFormat,
-                    cereal::make_nvp("trajectory", *_splines)
-            );
+                    cereal::make_nvp("trajectory", *_splines));
         }
     }
 
@@ -296,8 +296,7 @@ namespace ns_mi {
         if (!std::filesystem::create_directories(saveDir)) {
             throw ns_mi::Status(
                     ns_mi::Status::Flag::ERROR,
-                    fmt::format("create directory to save kinematics failed: '{}'", saveDir)
-            );
+                    fmt::format("create directory to save kinematics failed: '{}'", saveDir));
         }
 
         // align B-spline-derived measurements to each IMU
@@ -326,17 +325,14 @@ namespace ns_mi {
                 const Eigen::Matrix3d &angAcceMat = Sophus::SO3d::hat(angAcceInW);
 
                 const auto &est = IMUIntrinsics::KinematicsToInertialMes(
-                        item->GetTimestamp(), acceSpline.Evaluate(t) +
-                                              (angAcceMat + angVelMat * angVelMat) * SO3_curBrToW.matrix() * POS_BiInBr,
-                        SO3_curBrToW * so3Spline.VelocityBody(t), SO3_curBrToW * SO3_BiToBr, _parMagr->GRAVITY
-                );
+                        item->GetTimestamp(), acceSpline.Evaluate(t) + (angAcceMat + angVelMat * angVelMat) * SO3_curBrToW.matrix() * POS_BiInBr,
+                        SO3_curBrToW * so3Spline.VelocityBody(t), SO3_curBrToW * SO3_BiToBr, _parMagr->GRAVITY);
 
                 estMes.push_back(*intri.InvolveIntri(est));
 
                 diff.emplace_back(
                         item->GetTimestamp(), rawMes.back().GetGyro() - estMes.back().GetGyro(),
-                        rawMes.back().GetAcce() - estMes.back().GetAcce()
-                );
+                        rawMes.back().GetAcce() - estMes.back().GetAcce());
             }
             std::string name = topic;
             std::replace(name.begin(), name.end(), '/', '_');
@@ -346,8 +342,7 @@ namespace ns_mi {
             SerializeByOutputArchiveVariant(
                     ar, ns_mi::Configor::Preference::OutputDataFormat,
                     cereal::make_nvp("raw_inertial", rawMes), cereal::make_nvp("est_inertial", estMes),
-                    cereal::make_nvp("inertial_diff", diff)
-            );
+                    cereal::make_nvp("inertial_diff", diff));
         }
 
         const IMUIntrinsics &refIntri = _parMagr->INTRI.IMU.at(Configor::DataStream::ReferIMU);
@@ -376,16 +371,14 @@ namespace ns_mi {
                 const Eigen::Matrix3d &angAcceMat = Sophus::SO3d::hat(angAcceInW);
 
                 auto res = IMUIntrinsics::InertialMesToKinematics(
-                        t, mesInIdeal, SO3_curBrToW * SO3_BiToBr, _parMagr->GRAVITY
-                );
+                        t, mesInIdeal, SO3_curBrToW * SO3_BiToBr, _parMagr->GRAVITY);
 
                 auto alignedMes = IMUIntrinsics::KinematicsToInertialMes(
                         std::get<0>(res),
                         std::get<1>(res) - (angAcceMat + angVelMat * angVelMat) * SO3_curBrToW.matrix() * POS_BiInBr,
                         std::get<2>(res),
                         SO3_curBrToW,
-                        _parMagr->GRAVITY
-                );
+                        _parMagr->GRAVITY);
 
                 estMes.push_back(*refIntri.InvolveIntri(alignedMes));
             }
@@ -396,8 +389,7 @@ namespace ns_mi {
             std::ofstream file(saveDir + "/" + name + "_in_ref" + ns_mi::Configor::GetFormatExtension(), std::ios::out);
             auto ar = GetOutputArchiveVariant(file, ns_mi::Configor::Preference::OutputDataFormat);
             SerializeByOutputArchiveVariant(
-                    ar, ns_mi::Configor::Preference::OutputDataFormat, cereal::make_nvp("aligned_inertial", estMes)
-            );
+                    ar, ns_mi::Configor::Preference::OutputDataFormat, cereal::make_nvp("aligned_inertial", estMes));
         }
     }
 
@@ -413,7 +405,7 @@ namespace ns_mi {
     // ---------------------
 
     MICeresDebugCallBack::MICeresDebugCallBack(CalibParamManager::Ptr calibParamManager)
-            : _calibParamManager(std::move(calibParamManager)) {}
+        : _calibParamManager(std::move(calibParamManager)) {}
 
     auto MICeresDebugCallBack::Create(const CalibParamManager::Ptr &calibParamManager) {
         return new MICeresDebugCallBack(calibParamManager);
@@ -457,7 +449,7 @@ namespace ns_mi {
     // ----------------------
     MICeresViewerCallBack::MICeresViewerCallBack(CalibParamManager::Ptr calibParamManager,
                                                  ns_viewer::MultiViewer::Ptr viewer, SplineBundleType::Ptr splines)
-            : _parMagr(std::move(calibParamManager)), _viewer(std::move(viewer)), _splines(std::move(splines)) {}
+        : _parMagr(std::move(calibParamManager)), _viewer(std::move(viewer)), _splines(std::move(splines)) {}
 
     ceres::CallbackReturnType MICeresViewerCallBack::operator()(const ceres::IterationSummary &summary) {
         _viewer->RemoveEntity(_idVec, CalibSolver::VIEW_SENSORS);
@@ -495,8 +487,7 @@ namespace ns_mi {
             // coordinate
             entities.push_back(ns_viewer::Coordinate::Create(
                     ns_viewer::Posed(so3.matrix(), linScale).cast<float>(),
-                    static_cast<float>(Configor::Preference::ScaleCoord)
-            ));
+                    static_cast<float>(Configor::Preference::ScaleCoord)));
             t += dt;
         }
         return _viewer->AddEntity(entities, CalibSolver::VIEW_SPLINE);
@@ -508,8 +499,7 @@ namespace ns_mi {
         auto SE3_BcToBc = Sophus::SE3f();
         auto refIMU = ns_viewer::IMU::Create(
                 ns_viewer::Posef(SE3_BcToBc.so3().matrix(), SE3_BcToBc.translation()), 0.1,
-                ns_viewer::Colour(0.3f, 0.3f, 0.3f, 1.0f)
-        );
+                ns_viewer::Colour(0.3f, 0.3f, 0.3f, 1.0f));
         entities.push_back(refIMU);
 
         for (const auto &[topic, _]: _parMagr->EXTRI.SO3_BiToBr) {
@@ -517,13 +507,11 @@ namespace ns_mi {
 
             auto BiToBc = _parMagr->EXTRI.SE3_BiToBr(topic).cast<float>();
             auto imu = ns_viewer::IMU::Create(
-                    ns_viewer::Posef(BiToBc.so3().matrix(), BiToBc.translation()), 0.1
-            );
+                    ns_viewer::Posef(BiToBc.so3().matrix(), BiToBc.translation()), 0.1);
             auto line = ns_viewer::Line::Create(
-                    Eigen::Vector3f::Zero(), BiToBc.translation().cast<float>(), ns_viewer::Colour::Black()
-            );
+                    Eigen::Vector3f::Zero(), BiToBc.translation().cast<float>(), ns_viewer::Colour::Black());
             entities.insert(entities.cend(), {imu, line});
         }
         return _viewer->AddEntity(entities, CalibSolver::VIEW_SENSORS);
     }
-}
+}// namespace ns_mi
