@@ -1,3 +1,11 @@
+  <div align=center>
+   <a href="https://github.com/Unsigned-Long/iKalibr.git">
+      <img src="img/outdate.jpg" alt="Jump To iKalibr" width='100%'/>
+  </a>
+  </div>
+
+
+
 # MI-Calib: Multiple IMUs Spatiotemporal Calibrator
 
 ![Static Badge](https://img.shields.io/badge/Calibration-Multiple_Sensors-red) ![Static Badge](https://img.shields.io/badge/Cpp-17-green) ![ ](https://img.shields.io/badge/Multiple-IMUs-blue) ![Static Badge](https://img.shields.io/badge/MI-Calib-red) ![Static Badge](https://img.shields.io/badge/ROS-1.0-green) ![Static Badge](https://img.shields.io/badge/Python-3.0-blue) ![Static Badge](https://img.shields.io/badge/Continuous-Time-red) ![Static Badge](https://img.shields.io/badge/Bspline-Curves-green) ![Static Badge](https://img.shields.io/badge/Spatiotemporal-Calibrator-blue) ![Static Badge](https://img.shields.io/badge/WHU-SGG-red) ![Static Badge](https://img.shields.io/badge/ULong2-Shuolong_Chen-green) ![Static Badge](https://img.shields.io/badge/Wuhan-China-blue)
@@ -8,7 +16,7 @@
 
 If you use ***MI-Calib*** in a scientific publication, please cite the following paper 👇:
 
-+ under review
++ **S. Chen**, X. Li*, S. Li, Y. Zhou and S. Wang, "MI-Calib: An Open-Source Spatiotemporal Calibrator for Multiple IMUs Based on Continuous-Time Batch Optimization," in IEEE Robotics and Automation Letters (RA-L), 2024. [[paper]()] [[code](https://github.com/Unsigned-Long/MI-Calib.git)] [[video](https://www.bilibili.com/video/BV1hK4y1i7uM/)]
 
 <p align="left">
     <a><strong>Todo List »</strong></a>
@@ -24,9 +32,10 @@ Our accompanying videos are now available on [YouTube](https://youtu.be/JFTkFXbI
 
   <div align=center>
    <a href="https://youtu.be/JFTkFXbInwk">
-      <img src="img/demo.jpg" alt="RIs-Calib" width='80%'/>
+      <img src="img/demo.jpg" alt="MI-Calib" width='80%'/>
   </a>
   </div>
+
 
 
 ## 2. Build MI-Calib
